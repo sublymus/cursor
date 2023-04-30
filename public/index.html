@@ -30,7 +30,7 @@
   // document.body.style.cursor = "none";
   
   const targets = {}
-  const velocity = 30;
+  const velocity = 60;
   const create = (user) => {
 
     let div = document.createElement("div");
@@ -54,14 +54,20 @@
   };
 
   let lastTime = 0;
-  let interval = 200;
+  let interval = 180+20*Math.random();
+  let lastP =  { x: 0, y: 0 }
+  let p =  { x: 0, y: 0 }
   document.addEventListener("mousemove", (ev) => {
-    if(Date.now() - lastTime>interval){
-      socket.emit("client:position", { x: ev.x, y: ev.y });
-      lastTime = Date.now();
-    }
-    
+    p = { x: ev.x, y: ev.y };
   });
+
+  setInterval(() => {
+    if(lastP.x != p.x || lastP.y!=p.y){
+      socket.emit("client:position", p);
+      lastP = p;
+    }
+  }, interval);
+
   socket.on("server:userPosition", (users) => {
     //    const cursor = document.querySelector('#'+userid);
     for (const key in users) {

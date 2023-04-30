@@ -13,7 +13,12 @@ const server = app.listen(PORT, () => {
 app.use(cors());
 
 let users = {};
-const io = new Server(server);
+const io = new Server(server , {
+  cors:{
+    origin :"*",
+    methods:["GET", "POST"]
+  }
+});
 io.on("connection", (socket) => {
   users[socket.id] = {
     color:{
@@ -21,7 +26,7 @@ io.on("connection", (socket) => {
       g:Math.floor(Math.random()*255),
       b:Math.floor(Math.random()*255)
     },
-    idSocket: socket.id,
+    socketId: socket.id,
     id: Date.now(),
     position: { x: 0, y: 0 },
   };
