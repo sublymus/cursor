@@ -24,7 +24,7 @@ const firebaseConfig = {
 };
 
 
-const PORT =  8080;
+const PORT =  3000;
 
 
 
@@ -50,7 +50,7 @@ const io = new Server(server , {
   }
 });
 io.on("connection", (socket) => {
-  
+
   users[socket.id] = {
     color:{
       r:Math.floor(Math.random()*255),
