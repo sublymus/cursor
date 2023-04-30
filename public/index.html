@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CursorDraw</title>
+  <style>
+    .cursor {
+      background: rgb(83, 109, 212);
+      width: 14px;
+      height: 25px;
+      position: absolute;
+    }
+
+    /* * {
+      cursor: none;
+    } */
+  </style>
+</head>
+
+<body>
+  <h1>CursorDraw</h1>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
+<script>
+  // let socket = io("https://cursor-draw.vercel.app:8080");
+  let socket = io("http://localhost:3000");
+  // document.body.style.cursor = "none";
+  
+  const targets = {}
+  const velocity = 30;
+  const create = (user) => {
+
+    let div = document.createElement("div");
+    targets[user.id] = {
+      position:{
+        x:0,
+        y:0,
+      },
+      currently:{
+        x:0,
+        y:0,
+      },
+      cursor:div,
+      user,
+    }
+    div.style.background = `rgb(${user.color.r}, ${user.color.g}, ${user.color.b})`;
+    div.dataset.id = user.id;
+    div.classList.add("cursor");
+    document.body.appendChild(div);
+    return div;
+  };
+
+  let lastTime = 0;
+  let interval = 200;
+  document.addEventListener("mousemove", (ev) => {
+    if(Date.now() - lastTime>interval){
+      socket.emit("client:position", { x: ev.x, y: ev.y });
+      lastTime = Date.now();
+    }
+    
+  });
+  socket.on("server:userPosition", (users) => {
+    //    const cursor = document.querySelector('#'+userid);
+    for (const key in users) {
+      if (Object.hasOwnProperty.call(users, key)) {
+        const user = users[key];
+        if(!targets[user.id]) create(user);
+        console.log(user , targets[user.id]);
+        targets[user.id].position = user.position;
+      }
+    }
+  });
+
+  setInterval(() => {
+    for (const id in targets) {
+      if (Object.hasOwnProperty.call(targets, id)) {
+        const target = targets[id];
+        const cursor = target.cursor ;
+        
+        cursor.style.top = target.currently.y+ "px";
+        cursor.style.left = target.currently.x + "px";
+
+        target.currently.x +=(target.position.x - target.currently.x)/velocity
+        target.currently.y += (target.position.y - target.currently.y)/velocity
+      }
+    }
+  }, 10);
+  
+  socket.on("server:userCreate", (user) => {
+    console.log("CREATE ", user);
+    create(user);
+  });
+
+  socket.on("server:userDestroy", (user) => {
+    console.log('wertyuioiuytr');
+    delete targets[user.id];
+    document.querySelector(`div[data-id="${user.id}"]`).remove();
+  });
+</script>
+
+</html>
