@@ -50,6 +50,7 @@ const io = new Server(server , {
   }
 });
 io.on("connection", (socket) => {
+  
   users[socket.id] = {
     color:{
       r:Math.floor(Math.random()*255),
