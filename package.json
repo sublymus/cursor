@@ -3,6 +3,7 @@
 		"@types/node": "*",
 		"cors": "^2.8.5",
 		"express": "^4.18.2",
+		"firebase": "^9.21.0",
 		"nodemon": "^2.0.20",
 		"socket.io": "^4.5.4",
 		"sublymus_logger": "^1.0.1",

@@ -29,6 +29,7 @@
   //let socket = io("http://localhost:3000");
   // document.body.style.cursor = "none";
   
+
   const targets = {}
   const velocity = 60;
   const create = (user) => {
@@ -64,6 +65,7 @@
   setInterval(() => {
     if(lastP.x != p.x || lastP.y!=p.y){
       socket.emit("client:position", p);
+      sendMessage(p);
       lastP = p;
     }
   }, interval);

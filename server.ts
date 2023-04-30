@@ -3,7 +3,35 @@ import express from "express";
 import path from "path";
 
 import { Server } from "socket.io";
+
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBIZTd6PxuO4cJEKU2aM0sSzRifGGdnI4Y",
+  authDomain: "cursor-5b216.firebaseapp.com",
+  projectId: "cursor-5b216",
+  storageBucket: "cursor-5b216.appspot.com",
+  messagingSenderId: "975659464841",
+  appId: "1:975659464841:web:8d07bc8b1f785adc11ee58",
+  measurementId: "G-RK3X2WZ7LC"
+};
 const PORT =  8080;
+
+
+
+
+
+// Initialize Firebase
+const app2 = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app2);
+
 
 const app = express();
 const server = app.listen(PORT, () => {
