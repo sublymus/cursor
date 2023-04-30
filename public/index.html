@@ -65,7 +65,6 @@
   setInterval(() => {
     if(lastP.x != p.x || lastP.y!=p.y){
       socket.emit("client:position", p);
-      sendMessage(p);
       lastP = p;
     }
   }, interval);
